@@ -41,6 +41,14 @@ repositories {
 }
 
 dependencies {
+    // data policies
+    compile 'com.intellij:annotations:12.0'
+
+    // framework for dependency injection
+    // (easier to plugin extensions)
+    // + message bundle handling
+    compile 'org.springframework:spring-context:4.1.7.RELEASE'
+
     testCompile 'junit:junit:4.12'
 }
 
