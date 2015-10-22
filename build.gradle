@@ -55,6 +55,7 @@ dependencies {
 
 // ensure to build only acceptable versions
 jacocoTestReport.dependsOn test
+check.dependsOn jacocoTestReport
 test.dependsOn findbugsTest, pmdTest
 jar.dependsOn test, check, findbugsMain, pmdMain
 shadowJar.dependsOn test, check, findbugsMain, pmdMain
