@@ -19,6 +19,7 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
+apply plugin: 'jacoco'
 apply plugin: 'com.github.johnrengelman.shadow'
 
  //noinspection GroovyUnusedAssignment
@@ -53,6 +54,7 @@ dependencies {
 }
 
 // ensure to build only acceptable versions
+jacocoTestReport.dependsOn test
 test.dependsOn findbugsTest, pmdTest
 jar.dependsOn test, check, findbugsMain, pmdMain
 shadowJar.dependsOn test, check, findbugsMain, pmdMain
