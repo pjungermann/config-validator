@@ -58,7 +58,7 @@ public class ConfigTest {
     public void constructor_otherConfig_copyEntriesAndErrors() {
         Config other = new Config();
         other.put("other.key", 123);
-        ConfigError error = (() -> new DefaultMessageSourceResolvable("my.fake.code"));
+        ConfigError error = () -> new DefaultMessageSourceResolvable("my.fake.code");
         other.errors.add(error);
 
         Config config = new Config(other);
@@ -71,7 +71,7 @@ public class ConfigTest {
     public void constructor_putAllOfOtherConfig_copyEntriesAndErrors() {
         Config other = new Config();
         other.put("other.key", 123);
-        ConfigError error = (() -> new DefaultMessageSourceResolvable("my.fake.code"));
+        ConfigError error = () -> new DefaultMessageSourceResolvable("my.fake.code");
         other.errors.add(error);
 
         Config config = new Config();
