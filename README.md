@@ -1,5 +1,8 @@
-Config Validator
-===
+[![Build Status](https://travis-ci.org/pjungermann/config-validator.svg?branch=master)](https://travis-ci.org/pjungermann/config-validator)
+[![Coverage Status](https://codecov.io/github/pjungermann/config-validator/coverage.svg?branch=master)](https://codecov.io/github/pjungermann/config-validator?branch=master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.pjungermann.config/config-validator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.pjungermann.config/config-validator)
+
+# Config Validator
 Configuration is an elementary part of most applications. 
 It allows to apply to different use cases and environments. 
 Therefore, applications have certain expectations onto the 
@@ -19,14 +22,12 @@ This gets supported by the following modules:
 * Config Validator
 * Config Validator Application
 
-Config
-====
+## Config
 Basic key-value data structure.
 Theoretically it allows hierarchical structures, 
 but the validation itself is based on a flat structure.
 
-Config Loader
-====
+## Config Loader
 Abstraction layer to load any kind of config format.
 
 It also provides implementations for the following formats:
@@ -44,26 +45,22 @@ Planned for future iterations:
 * XML files
 * [Typesafe Config (``*.conf``)](https://github.com/typesafehub/config)
 
-Config Specification
-====
+## Config Specification
 To be able to validate a config, you need a way to specify your expectations to it.
 The config specification module provides a DSL backed by Groovy to express those.
 
 For the sake of a higher flexibility an abstraction allows to plug in another DSL easily.
 
-Config Validator
-====
+## Config Validator
 The config validator uses the config loader and config specification modules
 and validates the loaded config against the loaded specification for it.
 
-Config Validator Application
-====
+## Config Validator Application
 The application provides a command line interface to run your validation easily,
 i.e. as part of your build chain of your project, at configuration management 
 tools like Puppet or Chef as a test for all your instances' configuration.
 
-TODOs
-===
+# TODOs
 * Support for
  * XML
  * Typesafe Config ``*.conf`` files
@@ -71,7 +68,6 @@ TODOs
 * Where to deploy the fatJar to (aka. shadowJar)
 * Google Guice vs Spring Core for DI? Support for both?
 
-License
-===
+# License
 This project is licensed under the terms of the 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
