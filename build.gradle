@@ -60,6 +60,13 @@ jar.dependsOn test, check, findbugsMain, pmdMain
 shadowJar.dependsOn test, check, findbugsMain, pmdMain
 build.dependsOn shadowJar
 
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
 // report format settings
 tasks.withType(FindBugs) {
     ignoreFailures = true
