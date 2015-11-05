@@ -163,7 +163,7 @@ public class DefaultConfigLoaderTest {
         }
     }
 
-    class CreateRequest {
+    static class CreateRequest {
         File source;
         String profile;
         Config context;
