@@ -82,9 +82,10 @@ public abstract class AbstractConfigFileErrorTest<E extends ConfigFileError> {
 
     @Test
     public void getFilePath_withIllegalFileName_returnNullString() {
-        ConfigFileError error = getError(new File("/file"));
+        String filename = "file\u0000name";
+        ConfigFileError error = getError(new File(filename));
 
-        assertEquals("/file", error.getFilePath());
+        assertEquals(filename, error.getFilePath());
     }
 
     @Test

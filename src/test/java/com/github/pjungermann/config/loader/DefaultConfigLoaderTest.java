@@ -144,7 +144,7 @@ public class DefaultConfigLoaderTest {
         assertSame(context, request.context);
     }
 
-    class FakeConfigFactory implements ConfigFactory {
+    static class FakeConfigFactory implements ConfigFactory {
 
         @Override
         public boolean supports(@NotNull File source) {
