@@ -13,35 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pjungermann.config;
+package com.github.pjungermann.config.loader.errors;
 
-import org.jetbrains.annotations.NotNull;
+import com.github.pjungermann.config.errors.AbstractConfigFileErrorTest;
 
-import javax.inject.Singleton;
+import java.io.File;
 
 /**
- * Default {@link KeyBuilder} implementation.
+ * Tests for {@link NoSuchFileError}.
  *
  * @author Patrick Jungermann
  */
-@Singleton
-public class DefaultKeyBuilder implements KeyBuilder {
+public class NoSuchFileErrorTest extends AbstractConfigFileErrorTest<NoSuchFileError> {
 
-    /**
-     * Separator used between different key levels.
-     */
-    public static final String SEPARATOR = ".";
-
-    @NotNull
     @Override
-    public String getSeparator() {
-        return SEPARATOR;
+    public NoSuchFileError getError(File file) {
+        return new NoSuchFileError(file);
     }
 
-    @NotNull
     @Override
-    public String toPrefix(@NotNull final String key) {
-        return key + getSeparator();
+    public String getExpectedNameArgument() {
+        return "no such file";
     }
 
 }

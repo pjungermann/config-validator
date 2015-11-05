@@ -13,35 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pjungermann.config;
+package com.github.pjungermann.config.loader.errors;
 
-import org.jetbrains.annotations.NotNull;
+import com.github.pjungermann.config.errors.ConfigFileError;
 
-import javax.inject.Singleton;
+import java.io.File;
 
 /**
- * Default {@link KeyBuilder} implementation.
+ * Error for config file for which no config factory was found to load it.
  *
  * @author Patrick Jungermann
  */
-@Singleton
-public class DefaultKeyBuilder implements KeyBuilder {
+public class NoSuitableConfigFactoryFoundError extends ConfigFileError {
 
-    /**
-     * Separator used between different key levels.
-     */
-    public static final String SEPARATOR = ".";
-
-    @NotNull
-    @Override
-    public String getSeparator() {
-        return SEPARATOR;
-    }
-
-    @NotNull
-    @Override
-    public String toPrefix(@NotNull final String key) {
-        return key + getSeparator();
+    public NoSuitableConfigFactoryFoundError(final File file) {
+        super(file);
     }
 
 }

@@ -13,35 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.pjungermann.config;
+package com.github.pjungermann.config.types;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.inject.Singleton;
+import java.io.File;
 
 /**
- * Default {@link KeyBuilder} implementation.
+ * Selects a suitable {@link ConfigFactory} for the
+ * provided {@link File config source file}.
  *
  * @author Patrick Jungermann
  */
-@Singleton
-public class DefaultKeyBuilder implements KeyBuilder {
+public interface ConfigFactorySelector {
 
     /**
-     * Separator used between different key levels.
+     * Selects and returns a suitable {@link ConfigFactory}
+     * for the {@link File config source}.
+     *
+     * @param source    the source file.
+     * @return a suitable {@link ConfigFactory}, if there is any.
      */
-    public static final String SEPARATOR = ".";
-
-    @NotNull
-    @Override
-    public String getSeparator() {
-        return SEPARATOR;
-    }
-
-    @NotNull
-    @Override
-    public String toPrefix(@NotNull final String key) {
-        return key + getSeparator();
-    }
+    @Nullable
+    ConfigFactory getFactory(@NotNull File source);
 
 }
