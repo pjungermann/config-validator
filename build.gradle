@@ -78,7 +78,7 @@ jacocoTestReport {
 
 // report format settings
 tasks.withType(FindBugs) {
-    ignoreFailures = true
+    ignoreFailures = false
 
     reports {
         html.enabled = Boolean.parseBoolean(System.getProperty('gradle.reports.html', 'false'))
