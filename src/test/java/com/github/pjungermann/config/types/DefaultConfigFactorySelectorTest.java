@@ -114,6 +114,19 @@ public class DefaultConfigFactorySelectorTest {
         assertNull(result);
     }
 
+    @Test
+    public void setFactories_null_useEmptySet() {
+        // nullable annotation had to be used for optional binding in Guice
+        DefaultConfigFactorySelector selector = new DefaultConfigFactorySelector();
+        //noinspection ConstantConditions
+        assertTrue(getConfigFactories(selector).isEmpty());
+
+        selector.setConfigFactories(null);
+
+        //noinspection ConstantConditions
+        assertTrue(getConfigFactories(selector).isEmpty());
+    }
+
     static void assertValidBean(ConfigFactorySelector selector) {
         assertTrue(selector instanceof DefaultConfigFactorySelector);
         assertNull(selector.getFactory(new File("foo.bar")));
