@@ -584,13 +584,13 @@ public class ConfigLoaderTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     static void assertLoaderArgs(Config result, String profile, boolean recursive, Set<String> expectedContextKeys, String source) {
         Config sourceResult = (Config) result.get(source);
 
         assertEquals(profile, sourceResult.get("profile"));
         assertEquals(recursive, sourceResult.get("recursive"));
 
-        //noinspection unchecked
         Set<String> contextKeys = (Set<String>) sourceResult.get("context.keys");
         assertEquals(expectedContextKeys, contextKeys);
     }
@@ -611,13 +611,13 @@ public class ConfigLoaderTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     static void assertLoaderArgs(Config result, String profile, boolean recursive, Set<String> expectedContextKeys, File source) {
         Config sourceResult = (Config) result.get(source.toString());
 
         assertEquals(profile, sourceResult.get("profile"));
         assertEquals(recursive, sourceResult.get("recursive"));
 
-        //noinspection unchecked
         Set<String> contextKeys = (Set<String>) sourceResult.get("context.keys");
         assertEquals(expectedContextKeys, contextKeys);
     }
