@@ -127,17 +127,14 @@ public class DefaultConfigFactorySelectorTest {
         assertTrue(getConfigFactories(selector).isEmpty());
     }
 
-    static void assertOneOf(Object result, Object... instances) {
-        for (Object instance : instances) {
-            try {
-                assertSame(instance, result);
+    static void assertOneOf(Object actual, Object... choices) {
+        for (Object choice : choices) {
+            if (choice == actual) {
                 return;
-
-            } catch (AssertionError ignore) {
             }
         }
 
-        fail("expected one of:<" + Arrays.toString(instances) + "> but was:<" + result + ">");
+        fail("expected one of:<" + Arrays.toString(choices) + "> but was:<" + actual + ">");
     }
 
     static void assertValidBean(ConfigFactorySelector selector) {
