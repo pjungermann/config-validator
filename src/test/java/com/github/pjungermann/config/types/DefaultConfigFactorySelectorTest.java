@@ -29,6 +29,7 @@ import org.springframework.context.support.StaticApplicationContext;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -77,7 +78,7 @@ public class DefaultConfigFactorySelectorTest {
     }
 
     @Test
-    public void getFactory_withFactories_returnFirstApplicableFactory() {
+    public void getFactory_withFactories_returnApplicableFactory() {
         ConfigFactory factory1 = new TestConfigFactory(false);
         ConfigFactory factory2 = new TestConfigFactory(true);
         ConfigFactory factory3 = new TestConfigFactory(true);
@@ -92,7 +93,7 @@ public class DefaultConfigFactorySelectorTest {
 
         ConfigFactory result = selector.getFactory(new File("foo.bar"));
 
-        assertSame(factory2, result);
+        assertOneOf(result, factory2, factory3);
     }
 
     @Test
@@ -115,16 +116,28 @@ public class DefaultConfigFactorySelectorTest {
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void setFactories_null_useEmptySet() {
         // nullable annotation had to be used for optional binding in Guice
         DefaultConfigFactorySelector selector = new DefaultConfigFactorySelector();
-        //noinspection ConstantConditions
         assertTrue(getConfigFactories(selector).isEmpty());
 
         selector.setConfigFactories(null);
 
-        //noinspection ConstantConditions
         assertTrue(getConfigFactories(selector).isEmpty());
+    }
+
+    static void assertOneOf(Object result, Object... instances) {
+        for (Object instance : instances) {
+            try {
+                assertSame(instance, result);
+                return;
+
+            } catch (AssertionError ignore) {
+            }
+        }
+
+        fail("expected one of:<" + Arrays.toString(instances) + "> but was:<" + result + ">");
     }
 
     static void assertValidBean(ConfigFactorySelector selector) {
