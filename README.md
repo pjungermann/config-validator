@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/pjungermann/config-validator.svg?branch=master)](https://travis-ci.org/pjungermann/config-validator)
 [![Coverage Status](https://codecov.io/github/pjungermann/config-validator/coverage.svg?branch=master)](https://codecov.io/github/pjungermann/config-validator?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.pjungermann.config/config-validator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.pjungermann.config/config-validator)
+[![Dependency Status](https://www.versioneye.com/user/projects/56583c14ff016c003a001ad3/badge.svg)](https://www.versioneye.com/user/projects/56583c14ff016c003a001ad3)
 
 # Config Validator
 Configuration is an elementary part of most applications. 
