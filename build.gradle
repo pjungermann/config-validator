@@ -43,7 +43,7 @@ repositories {
 
 dependencies {
     // logging
-    compile 'org.slf4j:slf4j-log4j12:1.7.12'
+    compile 'org.slf4j:slf4j-log4j12:1.7.13'
 
     // data policies
     compile 'com.intellij:annotations:12.0'
@@ -54,7 +54,7 @@ dependencies {
     // framework for dependency injection
     // (easier to plugin extensions)
     // + message bundle handling
-    compile 'org.springframework:spring-context:4.1.7.RELEASE'
+    compile 'org.springframework:spring-context:4.2.3.RELEASE'
 
     // config utils
     compile 'org.apache.commons:commons-lang3:3.4'
