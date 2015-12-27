@@ -60,13 +60,13 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
 
     // groovy config
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile 'org.codehaus.groovy:groovy-all:2.4.5'
     // json config
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.4'
     // INI config
     compile 'org.ini4j:ini4j:0.5.4'
     // Yaml config
-    compile 'org.yaml:snakeyaml:1.14'
+    compile 'org.yaml:snakeyaml:1.16'
 
     testCompile 'junit:junit:4.12'
 
