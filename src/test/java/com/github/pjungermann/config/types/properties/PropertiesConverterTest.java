@@ -16,9 +16,7 @@
 package com.github.pjungermann.config.types.properties;
 
 import com.github.pjungermann.config.Config;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -31,9 +29,6 @@ import static org.junit.Assert.assertEquals;
  * @author Patrick Jungermann
  */
 public class PropertiesConverterTest {
-
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
     public void from_always_convertTheGivenPropertiesObjectIntoAConfigObject() {
