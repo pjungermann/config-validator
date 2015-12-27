@@ -59,6 +59,15 @@ dependencies {
     // config utils
     compile 'org.apache.commons:commons-lang3:3.4'
 
+    // groovy config
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    // json config
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.4'
+    // INI config
+    compile 'org.ini4j:ini4j:0.5.4'
+    // Yaml config
+    compile 'org.yaml:snakeyaml:1.14'
+
     testCompile 'junit:junit:4.12'
 
     // bean creation test to check compatibility with guice

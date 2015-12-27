@@ -1,0 +1,12 @@
+{
+  "level1": {
+    "level2": {
+      "string-type": "string",
+      "int-type": 123,
+      "double-type": 34.567,
+      "boolean_true": true,
+      "boolean_false": false
+    }
+  },
+  "first": "level"
+}
