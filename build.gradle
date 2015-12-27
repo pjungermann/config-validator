@@ -54,7 +54,7 @@ dependencies {
     // framework for dependency injection
     // (easier to plugin extensions)
     // + message bundle handling
-    compile 'org.springframework:spring-context:4.2.3.RELEASE'
+    compile 'org.springframework:spring-context:4.2.4.RELEASE'
 
     // config utils
     compile 'org.apache.commons:commons-lang3:3.4'
