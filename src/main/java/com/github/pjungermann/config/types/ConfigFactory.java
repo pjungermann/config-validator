@@ -45,8 +45,9 @@ public interface ConfigFactory {
      * @param context    the context to be applied to; i.e. for references to other values if that is supported.
      * @return the {@link Config} for the source.
      * @throws IOException if there was any issue loading the source's data.
+     * @throws ConfigConversionException if a conversion from one config type to another failed.
      */
     @NotNull
-    Config create(@NotNull File source, @Nullable String profile, @NotNull Config context) throws IOException;
+    Config create(@NotNull File source, @Nullable String profile, @NotNull Config context) throws IOException, ConfigConversionException;
 
 }

@@ -43,7 +43,7 @@ public abstract class AbstractConfigFactory<OtherConfigType> implements ConfigFa
     @NotNull
     public Config create(@NotNull final File source,
                          @Nullable final String profile,
-                         @NotNull final Config context) throws IOException {
+                         @NotNull final Config context) throws IOException, ConfigConversionException {
         final OtherConfigType other = doCreate(source, profile, context);
 
         return getConverter().from(other);

@@ -33,7 +33,7 @@ import static org.junit.Assert.assertEquals;
 public class AbstractConfigFactoryTest {
 
     @Test
-    public void create_always_createOtherConfigTypeAndConvertIt() throws IOException {
+    public void create_always_createOtherConfigTypeAndConvertIt() throws IOException, ConfigConversionException {
         TestConfigFactory factory = new TestConfigFactory();
         Config context = new Config();
         context.put("context.key", "context.value");

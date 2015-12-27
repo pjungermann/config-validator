@@ -16,20 +16,17 @@
 package com.github.pjungermann.config.types;
 
 import com.github.pjungermann.config.Config;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * Converter between {@link Config}
- * and another config format.
+ * Wrapper for exceptions which got thrown
+ * during the conversion at {@link ConfigConverter#from(Object)}
+ * or {@link ConfigConverter#to(Config)}.
  *
  * @author Patrick Jungermann
  */
-public interface ConfigConverter<T> {
+public class ConfigConversionException extends Exception {
 
-    @NotNull
-    Config from(@NotNull T convertible) throws ConfigConversionException;
-
-    @NotNull
-    T to(@NotNull Config config) throws ConfigConversionException;
-
+    public ConfigConversionException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
