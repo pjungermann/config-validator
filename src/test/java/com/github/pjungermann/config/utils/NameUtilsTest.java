@@ -18,7 +18,6 @@ package com.github.pjungermann.config.utils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * Tests for {@link NameUtils}.
@@ -53,11 +52,6 @@ public class NameUtilsTest {
     }
 
     @Test
-    public void getNaturalName_null_returnNull() {
-        assertNull(NameUtils.getNaturalName((String) null));
-    }
-
-    @Test
     public void getNaturalName_emptyString_returnEmptyString() {
         assertEquals("", NameUtils.getNaturalName(""));
     }
@@ -77,4 +71,53 @@ public class NameUtilsTest {
         assertEquals("UPPER Lower", NameUtils.getNaturalName("UPPERLower"));
     }
 
+    @Test
+    public void getPropertyName_always_returnPropertyNameForSimpleNameOfClass() {
+        assertEquals("nameUtils", NameUtils.getPropertyName(NameUtils.class));
+    }
+
+    @Test
+    public void getPropertyName_classAndNoTrailingName_returnPropertyNameForSimpleNameOfClass() {
+        assertEquals("nameUtils", NameUtils.getPropertyName(NameUtils.class, null));
+    }
+
+    @Test
+    public void getPropertyName_classAndTrailingName_returnPropertyNameForSimpleNameOfClassWithoutTrailingName() {
+        assertEquals("name", NameUtils.getPropertyName(NameUtils.class, "Utils"));
+    }
+
+    @Test
+    public void getPropertyName_classAndNonExistingTrailingName_returnPropertyNameForSimpleNameOfClass() {
+        assertEquals("nameUtils", NameUtils.getPropertyName(NameUtils.class, "foo"));
+    }
+
+    @Test
+    public void getPropertyName_classAndTrailingNameUnrelatedToCaseChange_returnPropertyNameForSimpleNameOfClass() {
+        assertEquals("nameUtil", NameUtils.getPropertyName(NameUtils.class, "s"));
+    }
+
+    @Test
+    public void getPropertyName_emptyString_returnEmptyString() {
+        assertEquals("", NameUtils.getPropertyName(""));
+    }
+
+    @Test
+    public void getPropertyName_camelCaseName_returnPropertyNameVersionStartingWithLowerCase() {
+        assertEquals("myFakeName", NameUtils.getPropertyName("MyFakeName"));
+    }
+
+    @Test
+    public void getPropertyName_camelCaseNameStartingWithLowerCase_returnWithoutChange() {
+        assertEquals("myFakeName", NameUtils.getPropertyName("myFakeName"));
+    }
+
+    @Test
+    public void getPropertyName_upperCaseOnly_returnAllLowerCase() {
+        assertEquals("upper", NameUtils.getPropertyName("UPPER"));
+    }
+
+    @Test
+    public void getPropertyName_firstWordUpperCaseOnly_returnFirstWordAllLowerCase() {
+        assertEquals("upperLower", NameUtils.getPropertyName("UPPERLower"));
+    }
 }

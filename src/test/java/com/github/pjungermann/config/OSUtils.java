@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Patrick Jungermann
+ * Copyright 2016 Patrick Jungermann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,25 @@
 package com.github.pjungermann.config;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.MessageSourceResolvable;
+
+import java.io.File;
 
 /**
- * Any kind of error related to the {@link Config}
- * including its loading and validation.
+ * Operating system utility methods to make tests OS independent.
  *
  * @author Patrick Jungermann
  */
-public interface ConfigError {
+public class OSUtils {
 
     /**
-     * The error message to be rendered.
+     * Converts a UNIX style path into the used OS's style,
+     * e.g. into a Windows style path. This allows to write
+     * tests independent from the used OS.
      *
-     * @return the error message to be rendered.
+     * @param path    UNIX style path.
+     * @return path in the style of the used OS (UNIX, Windows, ...).
      */
-    @NotNull
-    MessageSourceResolvable getMessage();
+    public static String toOSPath(@NotNull final String path) {
+        return new File(path).getPath();
+    }
 }
