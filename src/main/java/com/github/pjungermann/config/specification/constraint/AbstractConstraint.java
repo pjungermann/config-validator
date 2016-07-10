@@ -39,7 +39,7 @@ public abstract class AbstractConstraint implements Constraint {
     /**
      * @param key            The key for which this {@link Constraint} gets defined for.
      * @param expectation    The expectation which needs to be fulfilled by the config key's value.
-     * @param sourceLine     The {@link SourceLine} at which this expectation got expressed.
+     * @param sourceLine     The {@link SourceLine} at which this expectation got expressed at.
      */
     public AbstractConstraint(@NotNull final String key,
                               @NotNull final Object expectation,
