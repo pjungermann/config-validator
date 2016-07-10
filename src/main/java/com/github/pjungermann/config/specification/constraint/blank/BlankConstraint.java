@@ -70,11 +70,6 @@ public class BlankConstraint extends AbstractConstraint {
     }
 
     @Override
-    protected boolean skipNullValues() {
-        return true;
-    }
-
-    @Override
     protected boolean skipBlankValues() {
         return false;
     }
