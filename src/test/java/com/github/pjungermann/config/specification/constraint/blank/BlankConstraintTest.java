@@ -34,13 +34,6 @@ public class BlankConstraintTest {
     final SourceLine fakeSourceLine = new SourceLine(new File("fake"), -1);
 
     @Test
-    public void skipNullValues_always_true() {
-        BlankConstraint blank = new BlankConstraint("fake-key", false, fakeSourceLine);
-
-        assertTrue(blank.skipNullValues());
-    }
-
-    @Test
     public void skipBlankValues_always_notSkipThem() {
         BlankConstraint blank = new BlankConstraint("fake-key", false, fakeSourceLine);
 
