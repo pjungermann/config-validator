@@ -20,6 +20,7 @@ import com.github.pjungermann.config.reference.SourceLine;
 import com.github.pjungermann.config.specification.constraint.AbstractConstraint;
 import com.github.pjungermann.config.specification.constraint.Constraint;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Used to define whether a config value is allowed to be {@code null} or not.
@@ -34,19 +35,19 @@ public class NullableConstraint extends AbstractConstraint {
      * @param sourceLine     The {@link SourceLine} at which this expectation got expressed at.
      */
     public NullableConstraint(@NotNull final String key,
-                              @NotNull final Object expectation,
+                              @Nullable final Object expectation,
                               @NotNull final SourceLine sourceLine) {
         super(key, expectation, sourceLine);
     }
 
     @Override
     protected boolean isValidExpectation() {
-        return expectation instanceof Boolean;
+        return expectation != null && expectation instanceof Boolean;
     }
 
     @Override
     protected ConfigError doValidate(final Object value) {
-        final Boolean nullable = (Boolean) expectation;
+        final boolean nullable = (boolean) expectation;
 
         if (!nullable && value == null) {
             return violatedBy(null);

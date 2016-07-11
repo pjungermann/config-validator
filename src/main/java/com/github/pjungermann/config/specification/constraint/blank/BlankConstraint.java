@@ -20,6 +20,7 @@ import com.github.pjungermann.config.reference.SourceLine;
 import com.github.pjungermann.config.specification.constraint.AbstractConstraint;
 import com.github.pjungermann.config.specification.constraint.Constraint;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Used to define whether a {@link CharSequence} based config value
@@ -40,7 +41,7 @@ public class BlankConstraint extends AbstractConstraint {
      * @param sourceLine     The {@link SourceLine} at which this expectation got expressed at.
      */
     public BlankConstraint(@NotNull final String key,
-                           @NotNull final Object expectation,
+                           @Nullable final Object expectation,
                            @NotNull final SourceLine sourceLine) {
         super(key, expectation, sourceLine);
     }
@@ -52,17 +53,14 @@ public class BlankConstraint extends AbstractConstraint {
 
     @Override
     protected boolean isValidExpectation() {
-        return expectation instanceof Boolean;
+        return expectation != null && expectation instanceof Boolean;
     }
 
     @Override
     protected ConfigError doValidate(final Object value) {
-        final Boolean blankAllowed = (Boolean) expectation;
-        if (blankAllowed) {
-            return null;
-        }
+        final boolean blankAllowed = (boolean) expectation;
 
-        if (value.toString().trim().isEmpty()) {
+        if (!blankAllowed && value.toString().trim().isEmpty()) {
             return violatedBy(value);
         }
 

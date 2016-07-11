@@ -58,10 +58,10 @@ public class NullableConstraintTest {
         assertTrue(nullable.isValidExpectation());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    @SuppressWarnings("ConstantConditions")
+    @Test
     public void isValidExpectation_booleanNull_isNotNullArgument() {
-        new NullableConstraint("fake-key", null, fakeSourceLine);
+        NullableConstraint nullable = new NullableConstraint("fake-key", null, fakeSourceLine);
+        assertFalse(nullable.isValidExpectation());
     }
 
     @Test

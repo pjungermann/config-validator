@@ -42,7 +42,7 @@ public abstract class AbstractConstraint implements Constraint {
      * @param sourceLine     The {@link SourceLine} at which this expectation got expressed at.
      */
     public AbstractConstraint(@NotNull final String key,
-                              @NotNull final Object expectation,
+                              @Nullable final Object expectation,
                               @NotNull final SourceLine sourceLine) {
         this.key = key;
         this.expectation = expectation;

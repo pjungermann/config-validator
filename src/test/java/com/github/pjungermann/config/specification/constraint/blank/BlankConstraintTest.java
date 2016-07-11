@@ -67,10 +67,10 @@ public class BlankConstraintTest {
         assertTrue(blank.isValidExpectation());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    @SuppressWarnings("ConstantConditions")
+    @Test
     public void isValidExpectation_booleanNull_isNotNullArgument() {
-        new BlankConstraint("fake-key", null, fakeSourceLine);
+        BlankConstraint blank = new BlankConstraint("fake-key", null, fakeSourceLine);
+        assertFalse(blank.isValidExpectation());
     }
 
     @Test
