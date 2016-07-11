@@ -35,7 +35,7 @@ public interface Constraint extends Comparable<Constraint> {
 
     /**
      * As a convention, {@link Constraint} classes follow the class name pattern
-     * {TheName}Constraints which then results in "theName" as return value.
+     * {TheName}Constraint which then results in "theName" as returned value.
      *
      * @return the name of the constraint, as used at a {@link ConfigSpecification}.
      */
