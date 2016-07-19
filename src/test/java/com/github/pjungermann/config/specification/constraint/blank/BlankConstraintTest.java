@@ -81,7 +81,7 @@ public class BlankConstraintTest {
 
     /**
      * {@code null} values got skipped, and only
-     * {@link BlankConstraint#supports(Class) supported types get checked}.
+     * {@link BlankConstraint#supports(Class) supported types} get checked.
      *
      * Therefore, only blank or non-blank non-null character sequences
      * are expected here.
