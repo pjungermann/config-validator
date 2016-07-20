@@ -98,6 +98,10 @@ public abstract class AbstractConstraint implements Constraint {
             return null;
         }
 
+        if (value != null && !supports(value.getClass())) {
+            return new InvalidConfigValueTypeError(this, value);
+        }
+
         return doValidate(value);
     }
 

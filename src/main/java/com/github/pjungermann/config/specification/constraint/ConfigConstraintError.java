@@ -17,6 +17,7 @@ package com.github.pjungermann.config.specification.constraint;
 
 import com.github.pjungermann.config.ConfigError;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.MessageSourceResolvable;
 
 /**
@@ -27,14 +28,14 @@ import org.springframework.context.MessageSourceResolvable;
  */
 public class ConfigConstraintError implements ConfigError {
 
-    private final Constraint constraint;
-    private final Object value;
+    protected final Constraint constraint;
+    protected final Object value;
 
     /**
      * @param constraint The {@link Constraint} which got checked.
      * @param value      The invalid value.
      */
-    public ConfigConstraintError(@NotNull final Constraint constraint, final Object value) {
+    public ConfigConstraintError(@NotNull final Constraint constraint, @Nullable final Object value) {
         this.constraint = constraint;
         this.value = value;
     }

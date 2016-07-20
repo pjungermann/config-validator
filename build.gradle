@@ -68,6 +68,9 @@ dependencies {
     // Yaml config
     compile 'org.yaml:snakeyaml:1.16'
 
+    // config specification core
+    compile 'commons-validator:commons-validator:1.4.1'
+
     testCompile 'junit:junit:4.12'
 
     // bean creation test to check compatibility with guice
