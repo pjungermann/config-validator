@@ -42,14 +42,12 @@ public class DefaultConfigSpecificationLoaderTest {
     FakeTypeConverter converter;
     FakeSpecificationReader reader;
     DefaultConfigSpecificationLoader loader;
-    File root;
 
     @Before
     public void setUp() {
         converter = new FakeTypeConverter();
         reader = new FakeSpecificationReader();
         loader = new DefaultConfigSpecificationLoader(converter, reader);
-        root = temporaryFolder.getRoot();
     }
 
     @Test
@@ -79,7 +77,7 @@ public class DefaultConfigSpecificationLoaderTest {
         assertEquals(1, specification.constraints.size());
         assertEquals(file, specification.constraints.iterator().next().definedAt().file);
         assertEquals(1, specification.errors.size());
-        assertEquals(file, ((FailedToLoadSpecificationError) specification.errors.iterator().next()).file);
+        assertEquals(file, ((FakeConfigError) specification.errors.iterator().next()).file);
     }
 
     @Test
@@ -91,7 +89,7 @@ public class DefaultConfigSpecificationLoaderTest {
         assertEquals(1, specification.constraints.size());
         assertEquals(file, specification.constraints.iterator().next().definedAt().file);
         assertEquals(1, specification.errors.size());
-        assertEquals(file, ((FailedToLoadSpecificationError) specification.errors.iterator().next()).file);
+        assertEquals(file, ((FakeConfigError) specification.errors.iterator().next()).file);
     }
 
     @Test
@@ -111,7 +109,7 @@ public class DefaultConfigSpecificationLoaderTest {
         assertEquals(file1, constraintIterator.next().definedAt().file);
         assertEquals(1, specification.errors.size());
         Iterator<ConfigError> errorIterator = specification.errors.iterator();
-        assertEquals(file1, ((FailedToLoadSpecificationError) errorIterator.next()).file);
+        assertEquals(file1, ((FakeConfigError) errorIterator.next()).file);
     }
 
     @Test
@@ -134,7 +132,7 @@ public class DefaultConfigSpecificationLoaderTest {
         assertTrue(files.contains(file2));
         assertEquals(2, specification.errors.size());
         files = specification.errors.stream()
-                .map(configError -> ((FailedToLoadSpecificationError) configError).file)
+                .map(configError -> ((FakeConfigError) configError).file)
                 .collect(toList());
         assertTrue(files.contains(file1));
         assertTrue(files.contains(file2));
@@ -161,7 +159,7 @@ public class DefaultConfigSpecificationLoaderTest {
         assertTrue(files.contains(file3));
         assertEquals(2, specification.errors.size());
         files = specification.errors.stream()
-                .map(configError -> ((FailedToLoadSpecificationError) configError).file)
+                .map(configError -> ((FakeConfigError) configError).file)
                 .collect(toList());
         assertTrue(files.contains(file1));
         assertTrue(files.contains(file3));
@@ -189,7 +187,7 @@ public class DefaultConfigSpecificationLoaderTest {
         assertTrue(files.contains(file3));
         assertEquals(3, specification.errors.size());
         files = specification.errors.stream()
-                .map(configError -> ((FailedToLoadSpecificationError) configError).file)
+                .map(configError -> ((FakeConfigError) configError).file)
                 .collect(toList());
         assertTrue(files.contains(file1));
         assertTrue(files.contains(file2));
@@ -231,7 +229,7 @@ public class DefaultConfigSpecificationLoaderTest {
         public SpecificationPartial apply(File file) {
             return new SpecificationPartial(
                     singletonList(new FakeConstraint(file)),
-                    singletonList(new FailedToLoadSpecificationError(file, new Exception()))
+                    singletonList(new FakeConfigError(file))
             );
         }
     }
@@ -304,6 +302,21 @@ public class DefaultConfigSpecificationLoaderTest {
         @Override
         public int hashCode() {
             return 1;
+        }
+    }
+
+    static class FakeConfigError implements ConfigError {
+
+        public final File file;
+
+        public FakeConfigError(@NotNull final File file) {
+            this.file = file;
+        }
+
+        @NotNull
+        @Override
+        public MessageSourceResolvable getMessage() {
+            return new DefaultMessageSourceResolvable("fake");
         }
     }
 }
