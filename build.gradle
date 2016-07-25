@@ -43,7 +43,7 @@ repositories {
 
 dependencies {
     // logging
-    compile 'org.slf4j:slf4j-log4j12:1.7.13'
+    compile 'org.slf4j:slf4j-log4j12:1.7.21'
 
     // data policies
     compile 'com.intellij:annotations:12.0'
@@ -54,19 +54,19 @@ dependencies {
     // framework for dependency injection
     // (easier to plugin extensions)
     // + message bundle handling
-    compile 'org.springframework:spring-context:4.2.4.RELEASE'
+    compile 'org.springframework:spring-context:4.3.1.RELEASE'
 
     // config utils
     compile 'org.apache.commons:commons-lang3:3.4'
 
     // groovy config
-    compile 'org.codehaus.groovy:groovy-all:2.4.5'
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
     // json config
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.0'
     // INI config
     compile 'org.ini4j:ini4j:0.5.4'
     // Yaml config
-    compile 'org.yaml:snakeyaml:1.16'
+    compile 'org.yaml:snakeyaml:1.17'
 
     // config specification core
     compile 'commons-validator:commons-validator:1.4.1'
@@ -74,7 +74,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     // bean creation test to check compatibility with guice
-    testCompile 'com.google.inject:guice:4.0'
+    testCompile 'com.google.inject:guice:4.1.0'
     testCompile 'com.google.inject.extensions:guice-multibindings:4.0'
 }
 
