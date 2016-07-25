@@ -18,7 +18,12 @@ package com.github.pjungermann.config.utils;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Stream;
 
+import static com.github.pjungermann.config.OSUtils.toOSPath;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
 /**
@@ -137,4 +142,35 @@ public class FileUtilsTest {
         assertTrue(FileUtils.isOfType(new File("file.with.ext3"), "ext1", "ext2", "ext3"));
     }
 
+    @Test
+    public void listFiles_testDir_returnAllTestFilesAndFolderContained() {
+        Stream<Path> pathStream = FileUtils.listFiles(new File("src/test/resources/FileUtilsTest").toPath());
+        List<String> pathList = pathStream
+                .map(Path::toString)
+                .collect(toList());
+
+        assertEquals(4, pathList.size());
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/dir1")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/dir2")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/file1.txt")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/file2.txt")));
+    }
+
+    @Test
+    public void filesInDir_testDir_returnAllContainedFilesRecursively() {
+        Stream<Path> pathStream = FileUtils.filesInDir(new File("src/test/resources/FileUtilsTest").toPath());
+        List<String> pathList = pathStream
+                .map(Path::toString)
+                .collect(toList());
+
+        assertEquals(8, pathList.size());
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/file1.txt")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/file2.txt")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/dir1/file3.txt")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/dir1/file4.txt")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/dir2/file5.txt")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/dir2/file6.txt")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/dir2/dir21/file7.txt")));
+        assertTrue(pathList.contains(toOSPath("src/test/resources/FileUtilsTest/dir2/dir21/file8.txt")));
+    }
 }
