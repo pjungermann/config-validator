@@ -17,8 +17,10 @@ package com.github.pjungermann.config.specification.types;
 
 import com.github.pjungermann.config.Config;
 import com.github.pjungermann.config.specification.constraint.Constraint;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Function;
+import java.util.Set;
 
 /**
  * Allows to apply a transformation or conversion to a {@link Config}.
@@ -32,5 +34,16 @@ import java.util.function.Function;
  *
  * @author Patrick Jungermann
  */
-public interface TypeConverter extends Function<Config, Config> {
+public interface TypeConverter {
+
+    @NotNull
+    Set<String> getKeys();
+
+    void register(@NotNull String key, @NotNull Class asType);
+
+    boolean isConversionCommand(@NotNull String name);
+
+    boolean isValidConversionConfig(@Nullable Object conversionConfig);
+
+    void convert(@NotNull Config config);
 }
