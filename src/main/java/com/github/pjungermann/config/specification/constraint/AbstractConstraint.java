@@ -66,7 +66,26 @@ public abstract class AbstractConstraint implements Constraint {
      * @see #skipNullValues()
      * @see #skipBlankValues()
      */
+    @Nullable
     protected abstract ConfigError doValidate(final Object value);
+
+    /**
+     * Validates the value against the {@link #expectation}.
+     * Prior to this, the expectation got validated itself
+     * and some base checks are already done.
+     *
+     * @param config    The config containing the to be validated keys and values.
+     * @param value     The value which has to be validated against the expectation.
+     * @return a {@link ConfigError} if the value was invalid, {@code null} otherwise.
+     * @see #validate(Config)
+     * @see #isValidExpectation()
+     * @see #skipNullValues()
+     * @see #skipBlankValues()
+     */
+    @Nullable
+    protected ConfigError doValidate(final Config config, final Object value) {
+        return doValidate(value);
+    }
 
     @NotNull
     @Override
@@ -102,7 +121,7 @@ public abstract class AbstractConstraint implements Constraint {
             return new InvalidConfigValueTypeError(this, value);
         }
 
-        return doValidate(value);
+        return doValidate(config, value);
     }
 
     @NotNull

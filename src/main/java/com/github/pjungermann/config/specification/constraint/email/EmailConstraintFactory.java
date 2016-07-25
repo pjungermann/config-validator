@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
- * Creates a {@link EmailConstraint}.
+ * Creates an {@link EmailConstraint}.
  *
  * @author Patrick Jungermann
  */

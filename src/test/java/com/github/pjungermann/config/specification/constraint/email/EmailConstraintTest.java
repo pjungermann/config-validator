@@ -15,18 +15,16 @@
  */
 package com.github.pjungermann.config.specification.constraint.email;
 
-import com.github.pjungermann.config.Config;
-import com.github.pjungermann.config.reference.SourceLine;
-import com.github.pjungermann.config.specification.constraint.creditCard.CreditCardConstraint;
-import org.junit.Test;
+import com.github.pjungermann.config.specification.constraint.Constraint;
+import com.github.pjungermann.config.specification.constraint.GenericConstraintTest;
 
-import java.io.File;
 import java.nio.CharBuffer;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
-import static java.util.Collections.singletonList;
-import static org.junit.Assert.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonMap;
 
 /**
  * Tests for {@link EmailConstraint}.
@@ -38,144 +36,198 @@ import static org.junit.Assert.*;
  * @author patrick.jungermann
  * @since 2016-07-20
  */
-public class EmailConstraintTest {
+public class EmailConstraintTest extends GenericConstraintTest<EmailConstraint> {
 
-    final SourceLine fakeSourceLine = new SourceLine(new File("fake"), -1);
-
-    @Test
-    public void supports_always_returnTrueForCharSequenceTypesOnly() {
-        CreditCardConstraint creditCard = new CreditCardConstraint("fake-key", false, fakeSourceLine);
-
-        assertTrue(creditCard.supports(CharSequence.class));
-        assertTrue(creditCard.supports(String.class));
-        assertTrue(creditCard.supports(StringBuilder.class));
-        assertTrue(creditCard.supports(StringBuffer.class));
-        assertTrue(creditCard.supports(CharBuffer.class));
-
-        assertFalse(creditCard.supports(Object.class));
-        assertFalse(creditCard.supports(Integer.class));
-        assertFalse(creditCard.supports(Double.class));
+    /**
+     * @return the {@link Constraint} under test.
+     */
+    @Override
+    protected Class<EmailConstraint> getConstraintClass() {
+        return EmailConstraint.class;
     }
 
-    @Test
-    public void validate_nullValue_acceptedAsItGotSkipped() {
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, true, fakeSourceLine);
-
-        assertNull(email.validate(config(key, null)));
+    /**
+     * @return whether the {@link Constraint} is supposed to skip / ignore null values
+     */
+    @Override
+    protected boolean skipsNullValues() {
+        return true;
     }
 
-    @Test
-    public void validate_blankValue_acceptedAsItGotSkipped() {
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, true, fakeSourceLine);
-
-        assertNull(email.validate(config(key, "")));
+    /**
+     * @return whether the {@link Constraint} is supposed to skip / ignore blank values
+     */
+    @Override
+    protected boolean skipsBlankValues() {
+        return true;
     }
 
-    @Test
-    public void validate_validEmail_noError() {
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, true, fakeSourceLine);
-
-        assertNull(email.validate(config(key, "test@example.org")));
-
+    /**
+     * @return types supported for the values.
+     */
+    @Override
+    protected Class[] supportedTypes() {
+        return new Class[]{
+                CharSequence.class,
+                String.class,
+                StringBuffer.class,
+                StringBuilder.class,
+                CharBuffer.class
+        };
     }
 
-    @Test
-    public void validate_invalidEmail_error() {
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, true, fakeSourceLine);
-
-        assertNotNull(email.validate(config(key, "test @-example.org")));
+    /**
+     * @return types not supported for the values.
+     */
+    @Override
+    protected Class[] unsupportedTypes() {
+        return new Class[]{
+                Object.class,
+                Integer.class,
+                Long.class
+        };
     }
 
-    @Test
-    public void validate_localEmailAndNotAllowed_error() {
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, true, fakeSourceLine);
+    /**
+     * @return expectation configs which are not valid for this {@link Constraint}.
+     */
+    @Override
+    protected Object[] getInvalidExpectationConfigs() {
 
-        assertNotNull(email.validate(config(key, "test@localhost")));
+        return new Object[]{
+                null,
+                "invalid",
+                1234,
+                new Object()
+
+        };
     }
 
-    @Test
-    public void validate_localEmailAndAllowed_acceptIt() {
-        HashMap<String, Object> config = new HashMap<>();
-        config.put(EmailConstraint.LOCAL_KEY, true);
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, config, fakeSourceLine);
+    /**
+     * Sets up the test data
+     */
+    @Override
+    protected void testDataSetUp() {
+        with(false)
+                .valid("anything")
+                .buildAndAdd();
 
-        assertNull(email.validate(config(key, "test@localhost")));
-    }
+        with(true)
+                .valid("test@example.org")
+                .invalid("test@localhost")
+                .invalid("test@example.internal")
+                .invalid("test@example.local")
+                .invalid("test@example.lan")
+                .invalid("test@my.custom.lan")
+                .invalid("test@-localhost")
+                .invalid("test@-example.internal")
+                .invalid("test@-example.local")
+                .invalid("test@-example.lan")
+                .invalid("test @-example.org")
+                .buildAndAdd();
 
-    @Test
-    public void validate_customTDLButNotAllowed_error() {
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, true, fakeSourceLine);
+        with(Collections.emptyMap())
+                .valid("test@example.org")
+                .invalid("test@localhost")
+                .invalid("test@example.internal")
+                .invalid("test@example.local")
+                .invalid("test@example.lan")
+                .invalid("test@my.custom.lan")
+                .invalid("test@-localhost")
+                .invalid("test@-example.internal")
+                .invalid("test@-example.local")
+                .invalid("test@-example.lan")
+                .invalid("test @-example.org")
+                .buildAndAdd();
 
-        assertNotNull(email.validate(config(key, "foo@localhost")));
-        assertNotNull(email.validate(config(key, "foo@example.local")));
-        assertNotNull(email.validate(config(key, "foo@exmaple.lan")));
-        assertNotNull(email.validate(config(key, "foo@-localhost")));
-        assertNotNull(email.validate(config(key, "foo@-example.local")));
-        assertNotNull(email.validate(config(key, "foo@-exmaple.lan")));
-        assertNotNull(email.validate(config(key, "foo@-exmaple.lan")));
-    }
+        with(singletonMap("local", false))
+                .valid("test@example.org")
+                .invalid("test@localhost")
+                .invalid("test@example.internal")
+                .invalid("test@example.local")
+                .invalid("test@example.lan")
+                .invalid("test@my.custom.lan")
+                .invalid("test@-localhost")
+                .invalid("test@-example.internal")
+                .invalid("test@-example.local")
+                .invalid("test@-example.lan")
+                .invalid("test @-example.org")
+                .buildAndAdd();
 
-    @Test
-    public void validate_customTLDAndAllowed_acceptIt() {
-        HashMap<String, Object> constraintConfig = new HashMap<>();
-        constraintConfig.put(EmailConstraint.CUSTOM_TLDS_KEY, singletonList("local"));
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, constraintConfig, fakeSourceLine);
+        with(singletonMap("local", true))
+                .valid("test@example.org")
+                .valid("test@localhost")
+                .invalid("test@example.internal")
+                .invalid("test@example.local")
+                .invalid("test@example.lan")
+                .invalid("test@my.custom.lan")
+                .invalid("test@-localhost")
+                .invalid("test@-example.internal")
+                .invalid("test@-example.local")
+                .invalid("test@-example.lan")
+                .invalid("test @-example.org")
+                .buildAndAdd();
 
-        assertNull(email.validate(config(key, "foo@example.local")));
+        with(singletonMap("customTLDs", emptyList()))
+                .valid("test@example.org")
+                .invalid("test@localhost")
+                .invalid("test@example.internal")
+                .invalid("test@example.local")
+                .invalid("test@example.lan")
+                .invalid("test@my.custom.lan")
+                .invalid("test@-localhost")
+                .invalid("test@-example.internal")
+                .invalid("test@-example.local")
+                .invalid("test@-example.lan")
+                .invalid("test @-example.org")
+                .buildAndAdd();
 
-        assertNotNull(email.validate(config(key, "foo@localhost")));
-        assertNotNull(email.validate(config(key, "foo@exmaple.lan")));
-        assertNotNull(email.validate(config(key, "foo@-localhost")));
-        assertNotNull(email.validate(config(key, "foo@-example.local")));
-        assertNotNull(email.validate(config(key, "foo@-exmaple.lan")));
-        assertNotNull(email.validate(config(key, "foo@-exmaple.lan")));
-    }
+        with(singletonMap("customTLDs", Arrays.asList("internal", "local", "lan")))
+                .valid("test@example.org")
+                .invalid("test@localhost")
+                .valid("test@example.internal")
+                .valid("test@example.local")
+                .valid("test@example.lan")
+                .valid("test@my.custom.lan")
+                .invalid("test@-localhost")
+                .invalid("test@-example.internal")
+                .invalid("test@-example.local")
+                .invalid("test@-example.lan")
+                .invalid("test @-example.org")
+                .buildAndAdd();
 
-    @Test
-    public void validate_customTLDsAndMultipleAllowed_acceptIt() {
-        HashMap<String, Object> constraintConfig = new HashMap<>();
-        constraintConfig.put(EmailConstraint.CUSTOM_TLDS_KEY, Arrays.asList("local", "lan"));
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, constraintConfig, fakeSourceLine);
+        HashMap<String, Object> config1 = new HashMap<>();
+        config1.put("local", false);
+        config1.put("customTLDs", emptyList());
+        with(config1)
+                .valid("test@example.org")
+                .invalid("test@localhost")
+                .invalid("test@example.internal")
+                .invalid("test@example.local")
+                .invalid("test@example.lan")
+                .invalid("test@my.custom.lan")
+                .invalid("test@-localhost")
+                .invalid("test@-example.internal")
+                .invalid("test@-example.local")
+                .invalid("test@-example.lan")
+                .invalid("test @-example.org")
+                .buildAndAdd();
 
-        assertNotNull(email.validate(config(key, "foo@localhost")));
-        assertNull(email.validate(config(key, "foo@example.local")));
-        assertNull(email.validate(config(key, "foo@exmaple.lan")));
-        assertNotNull(email.validate(config(key, "foo@-localhost")));
-        assertNotNull(email.validate(config(key, "foo@-example.local")));
-        assertNotNull(email.validate(config(key, "foo@-exmaple.lan")));
-        assertNotNull(email.validate(config(key, "foo@-exmaple.lan")));
-    }
-
-    @Test
-    public void validate_customTLDAndLocalAllowed_acceptLocalEmailAndCustomTLDsWithinIt() {
-        HashMap<String, Object> constraintConfig = new HashMap<>();
-        constraintConfig.put(EmailConstraint.LOCAL_KEY, true);
-        constraintConfig.put(EmailConstraint.CUSTOM_TLDS_KEY, Arrays.asList("local", "lan"));
-        String key = "fake-key";
-        EmailConstraint email = new EmailConstraint(key, constraintConfig, fakeSourceLine);
-
-        assertNull(email.validate(config(key, "foo@localhost")));
-        assertNull(email.validate(config(key, "foo@example.local")));
-        assertNull(email.validate(config(key, "foo@exmaple.lan")));
-        assertNotNull(email.validate(config(key, "foo@-localhost")));
-        assertNotNull(email.validate(config(key, "foo@-example.local")));
-        assertNotNull(email.validate(config(key, "foo@-exmaple.lan")));
-        assertNotNull(email.validate(config(key, "foo@-exmaple.lan")));
-    }
-
-    private static Config config(final String key, final Object value) {
-        final Config config = new Config();
-        config.put(key, value);
-
-        return config;
+        HashMap<String, Object> config2 = new HashMap<>();
+        config2.put("local", true);
+        config2.put("customTLDs", Arrays.asList("internal", "local", "lan"));
+        with(config2)
+                .valid("test@example.org")
+                .valid("test@localhost")
+                .valid("test@example.internal")
+                .valid("test@example.local")
+                .valid("test@example.lan")
+                .valid("test@my.custom.lan")
+                .invalid("test@-localhost")
+                .invalid("test@-example.internal")
+                .invalid("test@-example.local")
+                .invalid("test@-example.lan")
+                .invalid("test @-example.org")
+                .buildAndAdd();
     }
 }

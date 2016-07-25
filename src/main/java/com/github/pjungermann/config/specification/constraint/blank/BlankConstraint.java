@@ -56,6 +56,7 @@ public class BlankConstraint extends AbstractConstraint {
         return expectation != null && expectation instanceof Boolean;
     }
 
+    @Nullable
     @Override
     protected ConfigError doValidate(final Object value) {
         final boolean blankAllowed = (boolean) expectation;

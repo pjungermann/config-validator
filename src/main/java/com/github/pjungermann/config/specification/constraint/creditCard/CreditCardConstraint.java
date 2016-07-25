@@ -60,8 +60,13 @@ public class CreditCardConstraint extends AbstractConstraint {
         super(key, expectation, sourceLine);
     }
 
+    @Nullable
     @Override
     protected ConfigError doValidate(final Object value) {
+        if (expectation instanceof  Boolean && !((Boolean) expectation)) {
+            return null;
+        }
+
         if (!getValidator().isValid(value.toString())) {
             return violatedBy(value);
         }
@@ -71,6 +76,7 @@ public class CreditCardConstraint extends AbstractConstraint {
 
     @SuppressWarnings("unchecked")
     protected CreditCardValidator getValidator() {
+        assert expectation != null;
         if (expectation instanceof CharSequence) {
             return new CreditCardValidator(TYPES.get(expectation.toString().toLowerCase(ENGLISH)));
         }
@@ -84,7 +90,6 @@ public class CreditCardConstraint extends AbstractConstraint {
         }
 
         long options = 0L;
-        //noinspection ConstantConditions
         for (final String type : selection) {
             options += TYPES.get(type.toLowerCase(ENGLISH));
         }
@@ -95,7 +100,12 @@ public class CreditCardConstraint extends AbstractConstraint {
     @Override
     protected boolean isValidExpectation() {
         return expectation != null
-                && (expectation instanceof Boolean || isValidType(expectation) || isValidTypeList(expectation));
+                &&
+                (
+                        expectation instanceof Boolean
+                                || isValidType(expectation)
+                                || isValidTypeList(expectation)
+                );
     }
 
     protected boolean isValidType(final Object type) {

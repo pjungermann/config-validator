@@ -19,6 +19,7 @@ import com.github.pjungermann.config.Config;
 import com.github.pjungermann.config.ConfigError;
 import com.github.pjungermann.config.reference.SourceLine;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.MessageSourceResolvable;
@@ -60,7 +61,7 @@ public class AbstractConstraintTest {
 
         assertNotNull(error);
         assertTrue(error instanceof InvalidConstraintConfigError);
-        assertEquals("Illegal config for constraint fake for config key fake-key: 1234", error.toString());
+        assertEquals("Illegal config for constraint \"fake\" for config key \"fake-key\": 1234", error.toString());
     }
 
     @Test
@@ -211,6 +212,7 @@ public class AbstractConstraintTest {
             return validExpectation;
         }
 
+        @Nullable
         @Override
         protected ConfigError doValidate(Object value) {
             return () -> new DefaultMessageSourceResolvable(value == null ? "<null>" : value.toString());

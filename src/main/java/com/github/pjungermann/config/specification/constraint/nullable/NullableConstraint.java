@@ -42,9 +42,11 @@ public class NullableConstraint extends AbstractConstraint {
 
     @Override
     protected boolean isValidExpectation() {
-        return expectation != null && expectation instanceof Boolean;
+        return expectation != null
+                && expectation instanceof Boolean;
     }
 
+    @Nullable
     @Override
     protected ConfigError doValidate(final Object value) {
         final boolean nullable = (boolean) expectation;

@@ -15,83 +15,88 @@
  */
 package com.github.pjungermann.config.specification.constraint.nullable;
 
-import com.github.pjungermann.config.ConfigError;
-import com.github.pjungermann.config.reference.SourceLine;
-import org.junit.Test;
+import com.github.pjungermann.config.specification.constraint.Constraint;
+import com.github.pjungermann.config.specification.constraint.GenericConstraintTest;
 
-import java.io.File;
-
-import static org.junit.Assert.*;
+import java.util.Objects;
 
 /**
  * Tests for {@link NullableConstraint}.
  *
  * @author Patrick Jungermann
  */
-public class NullableConstraintTest {
+public class NullableConstraintTest extends GenericConstraintTest<NullableConstraint> {
 
-    final SourceLine fakeSourceLine = new SourceLine(new File("fake"), -1);
-
-    @Test
-    public void skipNullValues_always_notSkipThem() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", false, fakeSourceLine);
-
-        assertFalse(nullable.skipNullValues());
+    /**
+     * @return the {@link Constraint} under test.
+     */
+    @Override
+    protected Class<NullableConstraint> getConstraintClass() {
+        return NullableConstraint.class;
     }
 
-    @Test
-    public void supports_always_allTypes() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", false, fakeSourceLine);
-
-        assertTrue(nullable.supports(Object.class));
+    /**
+     * @return whether the {@link Constraint} is supposed to skip / ignore null values
+     */
+    @Override
+    protected boolean skipsNullValues() {
+        return false;
     }
 
-    @Test
-    public void isValidExpectation_false_acceptValue() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", false, fakeSourceLine);
-        assertTrue(nullable.isValidExpectation());
+    /**
+     * @return whether the {@link Constraint} is supposed to skip / ignore blank values
+     */
+    @Override
+    protected boolean skipsBlankValues() {
+        return true;
     }
 
-    @Test
-    public void isValidExpectation_true_acceptValue() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", true, fakeSourceLine);
-        assertTrue(nullable.isValidExpectation());
+    /**
+     * @return types supported for the values.
+     */
+    @Override
+    protected Class[] supportedTypes() {
+        return new Class[]{
+                Object.class,
+                String.class,
+                Number.class,
+                Integer.class
+        };
     }
 
-    @Test
-    public void isValidExpectation_booleanNull_isNotNullArgument() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", null, fakeSourceLine);
-        assertFalse(nullable.isValidExpectation());
+    /**
+     * @return types not supported for the values.
+     */
+    @Override
+    protected Class[] unsupportedTypes() {
+        return new Class[0];
     }
 
-    @Test
-    public void isValidExpectation_nonBooleanValue_notAcceptValue() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", "non boolean", fakeSourceLine);
-        assertFalse(nullable.isValidExpectation());
+    /**
+     * @return expectation configs which are not valid for this {@link Constraint}.
+     */
+    @Override
+    protected Object[] getInvalidExpectationConfigs() {
+        return new Object[]{
+                null,
+                "invalid",
+                123
+        };
     }
 
-    @Test
-    public void doValidate_nullValuesAllowed_acceptAllValues() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", true, fakeSourceLine);
+    /**
+     * Sets up the test data
+     */
+    @Override
+    protected void testDataSetUp() {
+        with(true)
+                .valid((Object) null)
+                .valid(123, "any string", new Object())
+                .buildAndAdd();
 
-        assertNull(nullable.doValidate(null));
-        assertNull(nullable.doValidate("string"));
-        assertNull(nullable.doValidate(1234));
-        assertNull(nullable.doValidate(new Object()));
-    }
-
-    @Test
-    public void doValidate_nullValuesNotAllowedAndNotNull_acceptValue() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", false, fakeSourceLine);
-
-        assertNull(nullable.doValidate("non-null value"));
-    }
-
-    @Test
-    public void doValidate_nullValuesNotAllowedAndNull_rejectValue() {
-        NullableConstraint nullable = new NullableConstraint("fake-key", false, fakeSourceLine);
-
-        ConfigError error = nullable.doValidate(null);
-        assertEquals("nullable failed for key fake-key", error.toString());
+        with(false)
+                .valid(123, "any string", new Object())
+                .invalid((Objects) null)
+                .buildAndAdd();
     }
 }

@@ -40,7 +40,7 @@ public class InvalidConstraintConfigErrorTest {
     public void toString_always_messageContainingConstraintNameAndConfigKeyAndUsedConfig() {
         InvalidConstraintConfigError error = new InvalidConstraintConfigError(new FakeConstraint(), null);
 
-        assertEquals("Illegal config for constraint fake for config key fake-key: null", error.toString());
+        assertEquals("Illegal config for constraint \"fake\" for config key \"fake-key\": null", error.toString());
     }
 
     @Test

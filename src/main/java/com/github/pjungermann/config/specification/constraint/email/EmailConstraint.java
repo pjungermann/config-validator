@@ -17,68 +17,43 @@ package com.github.pjungermann.config.specification.constraint.email;
 
 import com.github.pjungermann.config.ConfigError;
 import com.github.pjungermann.config.reference.SourceLine;
-import com.github.pjungermann.config.specification.constraint.AbstractConstraint;
 import com.github.pjungermann.config.specification.constraint.Constraint;
+import com.github.pjungermann.config.specification.constraint.DomainAwareConstraint;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.*;
-
 /**
  * Used to validate that a given text value is a valid email address.
  *
- * Their different options on how to use this constraint:
+ * The different options on how to use this constraint:
  * <dl>
- *   <dl>{@code false}</dl>
+ *   <dt>{@code false}</dt>
  *   <dd>can be anything</dd>
  *
- *   <dl>{@code true}:</dl>
+ *   <dt>{@code true}:</dt>
  *   <dd>needs to be a valid email address</dd>
  *
- *   <dl>empty Map</dl>
+ *   <dt>empty Map</dt>
  *   <dd>same as {@code true}</dd>
  *
- *   <dl>Map with..</dl>
+ *   <dt>Map with..</dt>
  *   <dd>
- *       <dt>
- *           <dl>.. "local"</dl>
+ *       <dl>
+ *           <dt>.. "local"</dt>
  *           <dd>{@code true} / {@code false} to consider local email addresses as valid</dd>
  *
- *           <dl>.. "customTLDs"</dl>
+ *           <dt>.. "customTLDs"</dt>
  *           <dd>
  *               {@code Collection} of custom TLDs you need to consider as valid (e.g. ".local", ".lan", ...)
  *           </dd>
- *       </dt>
+ *       </dl>
  *   </dd>
+ * </dl>
  *
  * @author Patrick Jungermann
  */
-public class EmailConstraint extends AbstractConstraint {
-
-    public static final String LOCAL_KEY = "local";
-    public static final String CUSTOM_TLDS_KEY = "customTLDs";
-    public static final Set<String> ALLOWED_CONFIG_KEYS = unmodifiableSet(new HashSet<>(asList(LOCAL_KEY, CUSTOM_TLDS_KEY)));
-
-    /**
-     * Should local addresses be considered valid?
-     */
-    protected final boolean allowLocal;
-
-    /**
-     * Are their any additional (maybe custom) TLDs
-     * which need to be considered valid?
-     * (e.g. ".local", ".lan", ...)
-     */
-    protected final Set<String> allowedCustomTLDs;
-
-    protected final Map<String, Object> config;
+public class EmailConstraint extends DomainAwareConstraint {
 
     /**
      * {@link EmailConstraint} which does not consider local addresses valid.
@@ -91,69 +66,17 @@ public class EmailConstraint extends AbstractConstraint {
     public EmailConstraint(@NotNull final String key,
                            @Nullable final Object expectation,
                            @NotNull final SourceLine sourceLine) {
-        super(key, expectation instanceof Map ? true : expectation, sourceLine);
-
-        this.config = expectation instanceof Map ? (Map<String, Object>) expectation : emptyMap();
-        this.allowedCustomTLDs = configuredAllowedCustomTLDs(config);
-        this.allowLocal = configuredAllowLocal(config);
+        super(key, expectation, sourceLine);
     }
 
-    protected boolean configuredAllowLocal(@NotNull final Map<String, Object> config) {
-        final Object localConfig = config.get(LOCAL_KEY);
-        return localConfig != null && localConfig instanceof Boolean && (boolean) localConfig;
-    }
-
-    @NotNull
-    protected Set<String> configuredAllowedCustomTLDs(@NotNull final Map<String, Object> config) {
-        final Object customTLDsConfig = config.get(CUSTOM_TLDS_KEY);
-        if (customTLDsConfig instanceof Collection) {
-            @SuppressWarnings("unchecked")
-            final Collection<String> customTLDs = checkedCollection((Collection<String>) customTLDsConfig, String.class);
-
-            return new HashSet<>(customTLDs);
-        }
-
-        return emptySet();
-    }
-
+    @Nullable
     @Override
-    protected boolean isValidExpectation() {
-        for (final String key: config.keySet()) {
-            if (!ALLOWED_CONFIG_KEYS.contains(key)) {
-                return false;
-            }
-        }
-
-        return expectation != null && expectation instanceof Boolean;
-    }
-
-    @Override
-    protected ConfigError doValidate(final Object value) {
-        final boolean requireValid = (boolean) expectation;
-        if (!requireValid) {
-            return null;
-        }
-
-        final String rawEmail = value.toString();
-        final String email = removeCustomTLD(rawEmail);
-
-        final boolean allowLocal = this.allowLocal || !email.equals(rawEmail);
-        if (!EmailValidator.getInstance(allowLocal).isValid(email)) {
+    protected ConfigError doValidateWithoutCustomTLD(@NotNull final String value) {
+        if (!EmailValidator.getInstance(allowLocal).isValid(value)) {
             return violatedBy(value);
         }
 
         return null;
-    }
-
-    @NotNull
-    protected String removeCustomTLD(@NotNull final String email) {
-        for (final String tld: allowedCustomTLDs) {
-            if (email.toLowerCase().endsWith("." + tld)) {
-                return email.substring(0, email.length() - tld.length() - 1);
-            }
-        }
-
-        return email;
     }
 
     @Override

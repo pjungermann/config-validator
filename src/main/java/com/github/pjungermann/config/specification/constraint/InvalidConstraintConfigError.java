@@ -46,8 +46,8 @@ public class InvalidConstraintConfigError implements ConfigError {
 
     @Override
     public String toString() {
-        return "Illegal config for constraint " + constraint.getName()
-                + " for config key " + constraint.getKey() + ": "
+        return "Illegal config for constraint \"" + constraint.getName()
+                + "\" for config key \"" + constraint.getKey() + "\": "
                 + expectation;
     }
 
