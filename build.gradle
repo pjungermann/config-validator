@@ -64,7 +64,7 @@ dependencies {
     // + Groovy based DSL
     compile 'org.codehaus.groovy:groovy-all:2.4.7'
     // json config
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.1'
     // INI config
     compile 'org.ini4j:ini4j:0.5.4'
     // Yaml config
