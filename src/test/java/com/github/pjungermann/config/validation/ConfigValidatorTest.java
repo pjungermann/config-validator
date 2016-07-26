@@ -47,10 +47,12 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.support.StaticApplicationContext;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Locale;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.*;
 
 /**
@@ -224,7 +226,10 @@ public class ConfigValidatorTest {
     @Test
     public void validate_allConfigsAndSpecsAndStrictAdditionalSpecForSomeKeysWithoutSpec_validateWithKnownErrors() throws IOException {
         File customSpec = temporaryFolder.newFile();
-        try (FileWriter writer = new FileWriter(customSpec)) {
+        try (
+                FileOutputStream outputStream = new FileOutputStream(customSpec);
+                OutputStreamWriter writer = new OutputStreamWriter(outputStream, UTF_8.name())
+        ) {
             writer.write(
                     "\"another.entry\"(nullable: false)\n" +
                             "\"bill-to.address.city\"(nullable: false)"
@@ -301,7 +306,10 @@ public class ConfigValidatorTest {
     @Test
     public void validate_allConfigsNonRecursiveAndSpecsAndStrictAdditionalSpecForSomeKeysWithoutSpec_validateWithKnownErrors() throws IOException {
         File customSpec = temporaryFolder.newFile();
-        try (FileWriter writer = new FileWriter(customSpec)) {
+        try (
+                FileOutputStream outputStream = new FileOutputStream(customSpec);
+                OutputStreamWriter writer = new OutputStreamWriter(outputStream, UTF_8.name())
+        ) {
             writer.write(
                     "\"another.entry\"(nullable: false)\n" +
                             "\"bill-to.address.city\"(nullable: false)"
