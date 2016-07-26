@@ -16,7 +16,10 @@
 package com.github.pjungermann.config;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
+
+import java.util.Locale;
 
 /**
  * Any kind of error related to the {@link Config}
@@ -33,4 +36,17 @@ public interface ConfigError {
      */
     @NotNull
     MessageSourceResolvable getMessage();
+
+    /**
+     * Renders the {@link #getMessage() message} using the
+     * {@link MessageSource} and {@link Locale}.
+     *
+     * @param messageSource    {@link MessageSource} to render it.
+     * @param locale           {@link Locale} needed to render it.
+     * @return the message.
+     */
+    @NotNull
+    default String toMessage(@NotNull final MessageSource messageSource, @NotNull final Locale locale) {
+        return messageSource.getMessage(getMessage(), locale);
+    }
 }

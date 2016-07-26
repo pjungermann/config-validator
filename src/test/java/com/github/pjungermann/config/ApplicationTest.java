@@ -199,4 +199,64 @@ public class ApplicationTest {
                     e.getMessage().replace(new File(".").getCanonicalPath() + File.separator, ""));
         }
     }
+
+    @Test
+    public void main_collectionItemSpecWithValidValue_noValidationException() throws ConfigValidationException {
+        Application.main(
+                new String[]{
+                        "--configs", "src/test/resources/collectionTypeTest/config_valid.groovy",
+                        "--specs", "src/test/resources/collectionTypeTest/spec.groovy"
+                }
+        );
+    }
+
+    @Test
+    public void main_collectionItemSpecWithInvalidValue_knowValidationErrors() {
+        try {
+            Application.main(
+                    new String[]{
+                            "--configs", "src/test/resources/collectionTypeTest/config_invalid.groovy",
+                            "--specs", "src/test/resources/collectionTypeTest/spec.groovy"
+                    }
+            );
+            fail("not supposed to be successful");
+
+        } catch (ConfigValidationException e) {
+            assertEquals(
+                    "Validation errors:\n" +
+                            "- validation errors for collection with key \"collection\":\n" +
+                            "  - Config \"collection.[0].field\" with value [item1.field.invalid] is not contained within the list [item1.field] - src/test/resources/collectionTypeTest/spec.groovy(spec.groovy:16)\n" +
+                            "- validation errors for collection with key \"collection\":\n" +
+                            "  - Config \"collection.[1].field\" with value [item2.field.invalid] is not contained within the list [item2.field] - src/test/resources/collectionTypeTest/spec.groovy(spec.groovy:17)\n" +
+                            "- validation errors for collection with key \"collection\":\n" +
+                            "  - Config \"collection.[0..1].field\" with value [item1.field.invalid] does not apply to constraint \"matches\" with settings item\\d\\.field - src/test/resources/collectionTypeTest/spec.groovy(spec.groovy:18)\n" +
+                            "  - Config \"collection.[0..1].field\" with value [item2.field.invalid] does not apply to constraint \"matches\" with settings item\\d\\.field - src/test/resources/collectionTypeTest/spec.groovy(spec.groovy:18)\n" +
+                            "- validation errors for collection with key \"collection\":\n" +
+                            "  - Config \"collection.[*].field\" with value [item1.field.invalid] does not apply to constraint \"matches\" with settings item\\d\\.field - src/test/resources/collectionTypeTest/spec.groovy(spec.groovy:19)\n" +
+                            "  - Config \"collection.[*].field\" with value [item2.field.invalid] does not apply to constraint \"matches\" with settings item\\d\\.field - src/test/resources/collectionTypeTest/spec.groovy(spec.groovy:19)",
+                    e.getMessage());
+        }
+    }
+
+    @Test
+    public void main_collectionItemSpecAndNoCollection_knowValidationErrors() {
+        try {
+            Application.main(
+                    new String[]{
+                            "--configs", "src/test/resources/collectionTypeTest/config_noCollection.groovy",
+                            "--specs", "src/test/resources/collectionTypeTest/spec.groovy"
+                    }
+            );
+            fail("not supposed to be successful");
+
+        } catch (ConfigValidationException e) {
+            assertEquals(
+                    "Validation errors:\n" +
+                            "- Value \"is not a collection\" for key \"collection\" is not a collection; collection key \"collection.[0].field\"\n" +
+                            "- Value \"is not a collection\" for key \"collection\" is not a collection; collection key \"collection.[1].field\"\n" +
+                            "- Value \"is not a collection\" for key \"collection\" is not a collection; collection key \"collection.[0..1].field\"\n" +
+                            "- Value \"is not a collection\" for key \"collection\" is not a collection; collection key \"collection.[*].field\"",
+                    e.getMessage());
+        }
+    }
 }

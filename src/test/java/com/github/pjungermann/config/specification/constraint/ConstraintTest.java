@@ -63,6 +63,7 @@ public class ConstraintTest {
             return false;
         }
 
+        @Nullable
         @Override
         public ConfigError validate(@NotNull Config config) {
             return null;
@@ -124,6 +125,7 @@ public class ConstraintTest {
             return false;
         }
 
+        @Nullable
         @Override
         public ConfigError validate(@NotNull Config config) {
             return null;

@@ -42,7 +42,7 @@ public class ConfigValidationException extends Exception {
         final StringBuilder builder = new StringBuilder("Validation errors:");
 
         for (final ConfigError error : errors) {
-            final String errorMessage = messageSource.getMessage(error.getMessage(), Locale.getDefault());
+            final String errorMessage = error.toMessage(messageSource, Locale.getDefault());
             builder.append("\n- ").append(errorMessage);
         }
 

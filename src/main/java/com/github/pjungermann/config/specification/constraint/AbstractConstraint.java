@@ -18,10 +18,20 @@ package com.github.pjungermann.config.specification.constraint;
 import com.github.pjungermann.config.Config;
 import com.github.pjungermann.config.ConfigError;
 import com.github.pjungermann.config.reference.SourceLine;
+import com.github.pjungermann.config.specification.constraint.multi.*;
+import org.codehaus.groovy.runtime.RangeInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Base implementation for {@link Constraint constraints}.
@@ -99,14 +109,151 @@ public abstract class AbstractConstraint implements Constraint {
         return key;
     }
 
+    @Nullable
     @Override
     public ConfigError validate(@NotNull final Config config) {
+        return validate(config, key);
+    }
+
+    @Nullable
+    protected ConfigError validate(@NotNull final Config config, @NotNull final String key) {
         if (!isValidExpectation()) {
             return new InvalidConstraintConfigError(this, expectation);
         }
 
-        final Object value = config.get(key);
+        CollectionKey collectionKey = CollectionKeyBuilder.build(key);
+        if (collectionKey != null) {
+            return validateCollection(config, collectionKey);
+        }
 
+        return validateValue(config, config.get(key));
+    }
+
+    @Nullable
+    protected ConfigError validateCollection(@NotNull final Config config, @NotNull final CollectionKey key) {
+        final Object collectionObject = config.get(key.collectionKey);
+        if (collectionObject == null && skipNullValues()) {
+            return null;
+        }
+
+        if (!(collectionObject instanceof Collection)) {
+            return new NoCollectionError(key, collectionObject);
+        }
+
+        final Collection collection = (Collection) config.get(key.collectionKey);
+        if (collection.isEmpty()) {
+            return null;
+        }
+
+        final Object[] array = collection.toArray();
+
+        RangeInfo rangeInfo = key.entrySelection.subListBorders(array.length);
+        int from = rangeInfo.from;
+        int to = rangeInfo.to;
+
+        // adjust the collection size
+        // TODO: use strict mode to create errors here as well? could also be covered by specifying the size
+        if (array.length - 1 < from) {
+            // no entry to check
+            return null;
+        }
+        if (array.length < to) {
+            to = array.length;
+        }
+
+        final ArrayList<ConfigError> errors = new ArrayList<>();
+        for (int i = from; i < to; i++) {
+            ConfigError error;
+            Object entry = array[i];
+            if (key.propertyKey == null) {
+                error = validateValue(config, entry);
+
+            } else if (entry instanceof Config) {
+                error = validate(config, key.propertyKey);
+
+            } else if (entry instanceof Map) {
+                error = validateValue(config, ((Map) entry).get(key.propertyKey));
+
+            } else {
+                error = validateObjectProperty(config, key, entry, key.propertyKey);
+            }
+
+            if (error != null) {
+                errors.add(error);
+            }
+        }
+
+        if (errors.isEmpty()) {
+            return null;
+        }
+
+        return new MultiConfigError(key, errors);
+    }
+
+    @Nullable
+    protected ConfigError validateObjectProperty(@NotNull final Config config,
+                                                 @NotNull final CollectionKey key,
+                                                 @NotNull final Object object,
+                                                 @NotNull final String property) {
+        Method getter = getGetter(object, property);
+        if (getter != null) {
+            try {
+                return validateValue(config, getter.invoke(object));
+
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                return new PropertyGetterAccessFailedError(key, object, getter.getName());
+            }
+        }
+
+        Field field = getField(object, property);
+        if (field != null) {
+            try {
+                return validateValue(config, field.get(object));
+
+            } catch (IllegalAccessException e) {
+                return new PropertyFieldAccessFailedError(key, object, field.getName());
+            }
+        }
+
+        return new UnsupportedCollectionEntryPropertyError(key, object);
+    }
+
+    @Nullable
+    protected Field getField(Object object, String name) {
+        try {
+            return object.getClass().getField(name);
+
+        } catch (NoSuchFieldException e) {
+            return null;
+        }
+    }
+
+    protected Method getGetter(Object object, String property) {
+        String getterName = "get" +
+                property.substring(0, 1).toUpperCase(Locale.ENGLISH) + property.substring(1);
+        Method getter;
+        try {
+             getter = object.getClass().getMethod(getterName);
+
+        } catch (NoSuchMethodException e) {
+            getter = null;
+        }
+
+        if (getter != null) {
+            return getter;
+        }
+
+        for (Method method: object.getClass().getMethods()) {
+            if (method.getName().equalsIgnoreCase("get" + property)) {
+                return method;
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    protected ConfigError validateValue(@NotNull final Config config, @Nullable final Object value) {
         if (skipNullValues() && value == null) {
             return null;
         }
@@ -145,6 +292,7 @@ public abstract class AbstractConstraint implements Constraint {
         );
     }
 
+    @NotNull
     protected String getMessageCode() {
         return "constraints.invalid." + getName() + ".message";
     }
@@ -165,6 +313,7 @@ public abstract class AbstractConstraint implements Constraint {
      * @param value    the invalid value.
      * @return a {@link ConfigConstraintError} for the value.
      */
+    @NotNull
     protected ConfigError violatedBy(final Object value) {
         return new ConfigConstraintError(this, value);
     }
