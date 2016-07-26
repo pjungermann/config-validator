@@ -20,6 +20,7 @@ import com.github.pjungermann.config.types.ConfigConverter;
 import com.github.pjungermann.config.types.FileTypeConfigFactory;
 import org.ini4j.Ini;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,6 +33,7 @@ import java.io.IOException;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class IniConfigFactory extends FileTypeConfigFactory<Ini> {
 

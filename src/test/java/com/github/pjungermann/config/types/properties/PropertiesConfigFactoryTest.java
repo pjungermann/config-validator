@@ -44,7 +44,7 @@ public class PropertiesConfigFactoryTest extends BaseConfigFactoryTest<Propertie
 
     @Override
     public String getConfigFile() {
-        return "config.properties";
+        return "sub-dir/config.properties";
     }
 
     @Override

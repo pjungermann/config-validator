@@ -22,6 +22,7 @@ import org.ini4j.Ini;
 import org.ini4j.Profile.Section;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -32,6 +33,7 @@ import java.util.Map;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class IniConverter implements ConfigConverter<Ini> {
 

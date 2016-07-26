@@ -25,6 +25,7 @@ import groovy.lang.GroovyShell;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -41,6 +42,7 @@ import static java.util.Collections.emptyList;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class GroovyDSLSpecificationReader implements SpecificationReader {
 

@@ -23,6 +23,7 @@ import groovy.util.ConfigObject;
 import groovy.util.ConfigSlurper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,6 +37,7 @@ import java.io.IOException;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class ConfigObjectConfigFactory extends FileTypeConfigFactory<ConfigObject> {
 

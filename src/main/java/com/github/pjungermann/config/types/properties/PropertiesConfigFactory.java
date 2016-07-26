@@ -19,6 +19,7 @@ import com.github.pjungermann.config.Config;
 import com.github.pjungermann.config.types.ConfigConverter;
 import com.github.pjungermann.config.types.FileTypeConfigFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,6 +37,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class PropertiesConfigFactory extends FileTypeConfigFactory<Properties> {
 

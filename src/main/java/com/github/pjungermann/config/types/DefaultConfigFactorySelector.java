@@ -17,6 +17,7 @@ package com.github.pjungermann.config.types;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,6 +34,7 @@ import static java.util.Collections.emptySet;
  * @author Patrick Jungermann
  * @see ConfigFactory#supports(File)
  */
+@Component
 @Singleton
 public class DefaultConfigFactorySelector implements ConfigFactorySelector {
 

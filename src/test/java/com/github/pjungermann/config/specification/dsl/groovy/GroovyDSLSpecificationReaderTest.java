@@ -77,6 +77,7 @@ public class GroovyDSLSpecificationReaderTest {
                 .setAutowireMode(AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR)
                 .getBeanDefinition();
         applicationContext.registerBeanDefinition("constraintRegistry", beanDefinition);
+        applicationContext.refresh();
 
         reader = new GroovyDSLSpecificationReader(applicationContext);
     }

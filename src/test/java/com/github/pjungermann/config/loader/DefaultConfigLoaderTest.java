@@ -50,8 +50,7 @@ public class DefaultConfigLoaderTest {
     public void setUp() {
         factory = new FakeConfigFactory();
 
-        loader = new DefaultConfigLoader();
-        loader.setConfigFactorySelector(source -> factory);
+        loader = new DefaultConfigLoader(source -> factory);
     }
 
     @Test
@@ -174,5 +173,4 @@ public class DefaultConfigLoaderTest {
             this.context = context;
         }
     }
-
 }

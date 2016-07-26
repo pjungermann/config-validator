@@ -19,6 +19,7 @@ import com.github.pjungermann.config.Config;
 import com.github.pjungermann.config.types.ConfigConverter;
 import com.github.pjungermann.config.types.FileTypeConfigFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.inject.Inject;
@@ -37,6 +38,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class YamlConfigFactory extends FileTypeConfigFactory<LinkedHashMap<String, Object>> {
 

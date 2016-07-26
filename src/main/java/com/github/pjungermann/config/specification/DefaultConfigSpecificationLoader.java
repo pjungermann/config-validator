@@ -22,6 +22,7 @@ import com.github.pjungermann.config.specification.reader.SpecificationReader;
 import com.github.pjungermann.config.specification.types.TypeConverter;
 import com.github.pjungermann.config.utils.FilesResolver;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -37,6 +38,7 @@ import static java.util.Collections.synchronizedList;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class DefaultConfigSpecificationLoader implements ConfigSpecificationLoader {
 

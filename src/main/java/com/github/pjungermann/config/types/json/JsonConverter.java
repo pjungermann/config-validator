@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -42,6 +43,7 @@ import static java.util.Collections.synchronizedMap;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class JsonConverter implements ConfigConverter<ObjectNode> {
 

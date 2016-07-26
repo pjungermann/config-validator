@@ -51,7 +51,7 @@ public class YamlConfigFactoryTest extends BaseConfigFactoryTest<YamlConfigFacto
 
     @Override
     public String getConfigFile() {
-        return "config.yaml";
+        return "sub-dir/config.yaml";
     }
 
     @Override

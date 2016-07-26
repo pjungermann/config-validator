@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,6 +36,7 @@ import java.io.File;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class DefaultConfigLoader implements ConfigLoader {
 
@@ -43,7 +45,7 @@ public class DefaultConfigLoader implements ConfigLoader {
     private ConfigFactorySelector configFactorySelector;
 
     @Inject
-    public void setConfigFactorySelector(@NotNull final ConfigFactorySelector configFactorySelector) {
+    public DefaultConfigLoader(@NotNull final ConfigFactorySelector configFactorySelector) {
         this.configFactorySelector = configFactorySelector;
     }
 
@@ -100,5 +102,4 @@ public class DefaultConfigLoader implements ConfigLoader {
             return config;
         }
     }
-
 }

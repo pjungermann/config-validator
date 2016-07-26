@@ -21,6 +21,7 @@ import com.github.pjungermann.config.types.ConfigConverter;
 import com.github.pjungermann.config.types.FileTypeConfigFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,6 +36,7 @@ import static com.github.pjungermann.config.types.json.JsonConverter.MAPPER;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class JsonConfigFactory extends FileTypeConfigFactory<ObjectNode> {
 

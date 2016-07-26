@@ -19,6 +19,7 @@ import com.github.pjungermann.config.Config;
 import com.github.pjungermann.config.KeyBuilder;
 import com.github.pjungermann.config.types.ConfigConverter;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,6 +34,7 @@ import static java.util.Collections.synchronizedMap;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class YamlConverter implements ConfigConverter<LinkedHashMap<String, Object>> {
 

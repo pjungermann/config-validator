@@ -16,6 +16,7 @@
 package com.github.pjungermann.config;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Singleton;
 
@@ -24,6 +25,7 @@ import javax.inject.Singleton;
  *
  * @author Patrick Jungermann
  */
+@Component
 @Singleton
 public class DefaultKeyBuilder implements KeyBuilder {
 

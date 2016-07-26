@@ -43,7 +43,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class YamlConverterTest extends CollectedAssertions {
 
-    public final File configSource = new File("src/test/resources/configs/config.yaml");
+    public final File configSource = new File("src/test/resources/configs/sub-dir/config.yaml");
 
     public YamlConverter converter;
 
