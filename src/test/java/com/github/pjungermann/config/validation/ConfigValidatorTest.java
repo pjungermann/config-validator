@@ -153,18 +153,18 @@ public class ConfigValidatorTest {
      * @param numArguments The amount of arguments, max expected for it.
      */
     void addMessage(String code, int numArguments) {
-        String argumentPlaceholders = "";
+        StringBuilder argumentPlaceholders = new StringBuilder();
         for (int i = 0; i < numArguments; i++) {
-            argumentPlaceholders += "{" + i + "} - ";
+            argumentPlaceholders.append("{").append(i).append("} - ");
         }
         if (numArguments > 0) {
-            argumentPlaceholders = argumentPlaceholders.substring(0, argumentPlaceholders.length() - 3);
+            argumentPlaceholders.setLength(argumentPlaceholders.length() - 3);
         }
 
         applicationContext.getStaticMessageSource().addMessage(
                 code,
                 Locale.getDefault(),
-                code + ": " + argumentPlaceholders
+                code + ": " + argumentPlaceholders.toString()
         );
     }
 
