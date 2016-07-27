@@ -5,3 +5,7 @@ before_install:
   - pip install --user codecov
 after_success:
   - codecov
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
