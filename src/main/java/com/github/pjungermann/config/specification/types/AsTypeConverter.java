@@ -44,7 +44,7 @@ public class AsTypeConverter implements TypeConverter {
 
     public static final String COMMAND = "as";
 
-    protected final ConcurrentHashMap<String, Class> keyAsTypeMapping = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<String, Class<?>> keyAsTypeMapping = new ConcurrentHashMap<>();
 
     @NotNull
     @Override
